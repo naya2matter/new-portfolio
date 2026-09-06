@@ -1,26 +1,195 @@
 @import "tailwindcss";
+@import "pullcord/pullcord.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ivory-paper: #fff9e2;
+  --pistachio-wash: #ebeccc;
+  --eucalyptus-sage: #cdd4b1;
+  --peach-veil: #feecd0;
+  --clay: #dca278;
+  --forest-ink: #232a1e;
+  --olive-muted: #6b7360;
+
+  --background: var(--ivory-paper);
+  --foreground: var(--forest-ink);
+  --surface: var(--pistachio-wash);
+  --surface-raised: var(--eucalyptus-sage);
+  --highlight: var(--peach-veil);
+  --accent: var(--clay);
+  --muted: var(--olive-muted);
+
+  --glass-bg: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(35, 42, 30, 0.14);
+  --glass-shadow: rgba(35, 42, 30, 0.14);
+
+  --pullcord-top: -8px;
+  --pullcord-right: 3.5rem;
+  --pullcord-z: 60;
+  --pullcord-ink: var(--clay);
+}
+
+.dark {
+  --olive-char: #181b14;
+  --bark-surface: #22261d;
+  --moss-raise: #2c3126;
+  --ivory-type: #f2efdd;
+  --sage-muted: #9da48c;
+
+  --background: var(--olive-char);
+  --foreground: var(--ivory-type);
+  --surface: var(--bark-surface);
+  --surface-raised: var(--moss-raise);
+  --highlight: var(--moss-raise);
+  --accent: var(--clay);
+  --muted: var(--sage-muted);
+
+  --glass-bg: rgba(34, 38, 29, 0.32);
+  --glass-border: rgba(242, 239, 221, 0.14);
+  --glass-shadow: rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-highlight: var(--highlight);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--glass-border);
+
+  --color-ivory-paper: var(--ivory-paper);
+  --color-pistachio-wash: var(--pistachio-wash);
+  --color-eucalyptus-sage: var(--eucalyptus-sage);
+  --color-peach-veil: var(--peach-veil);
+  --color-clay: var(--clay);
+  --color-forest-ink: var(--forest-ink);
+  --color-olive-muted: var(--olive-muted);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-fraunces);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
+}
+
+/* Arabic-script font swap. Tailwind's generated `.font-sans` / `.font-mono` /
+   `.font-display` utilities compile straight to `var(--font-geist-sans)` /
+   `var(--font-geist-mono)` / `var(--font-fraunces)` — the raw next/font
+   variables, not the `--font-sans` theme alias — so overriding THOSE (once
+   the language toggle sets `dir="rtl"` on <html>) is what actually reaches
+   every element using those utilities, with no className changes anywhere
+   else. `html[dir="rtl"]`'s specificity (0,1,1) beats the `.font-variable`
+   class next/font sets these from (0,1,0), so this always wins. Geist and
+   Fraunces have no Arabic glyphs, so English content is unaffected. */
+html[dir="rtl"] {
+  --font-geist-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: var(--font-cairo), ui-monospace, monospace;
+  --font-fraunces: var(--font-amiri), Georgia, serif;
+}
+
+/* Wide letter-spacing (the mono/uppercase eyebrow labels, badges, and filter
+   tabs) reads fine in Latin but breaks Arabic letterforms apart, since
+   Arabic joins letters within a word — so it's switched off for RTL only. */
+html[dir="rtl"] .uppercase {
+  letter-spacing: 0;
+}
+
+/* Frosted glass surface. Needs a colorful blurred backdrop behind it (see
+   the .blob elements in Hero) to actually read as "glass" rather than a
+   plain translucent gray panel. */
+.glass {
+  @apply backdrop-blur-2xl;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 24px 48px var(--glass-shadow);
+}
+
+/* Large soft color field, blurred into a glow. Used both as full-bleed
+   background atmosphere and, scaled down, as the ring behind the hero photo. */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* Applied for ~600ms while the pull-cord flips the theme, so every surface
+   crossfades to its new palette instead of snapping. Broad selector is
+   deliberate but strictly temporary — the class is removed once it settles. */
+.theme-shifting *,
+.theme-shifting *::before,
+.theme-shifting *::after {
+  transition:
+    background-color 450ms ease,
+    border-color 450ms ease,
+    color 450ms ease,
+    box-shadow 450ms ease,
+    fill 450ms ease,
+    stroke 450ms ease;
+}
+
+/* Smooths the show/hide toggle Nav drives via PullCord's `className` prop
+   (see ThemeToggle) — without this the cord would snap away the instant the
+   mobile menu opens instead of yielding to it gracefully. */
+.pullcord {
+  transition: opacity 250ms ease;
+}
+
+/* The cord's rope + hit area are fixed pixel dimensions (see the pullcord
+   package), sized for desktop — at phone width they dangle a full third of
+   the viewport deep into the hero photo. Scaling the whole wrapper down and
+   anchoring the transform to its own top-right corner keeps the knob tucked
+   near the nav instead of hanging into content below it. */
+@media (max-width: 639px) {
+  .pullcord {
+    transform: scale(0.72);
+    transform-origin: top right;
+  }
+}
+
+/* Soft fade separating the sticky glass nav from whatever scrolls under it. */
+.nav-fade {
+  background: linear-gradient(
+    to bottom,
+    var(--glass-shadow),
+    transparent
+  );
+}
+
+/* Thin, theme-matched scrollbar — applies everywhere by default (the page,
+   and any internal scroll container like the project modal's image pane),
+   since both read the same --surface/--accent tokens that already flip
+   with .dark, no separate dark-mode block needed. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent);
 }

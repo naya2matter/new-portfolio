@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "title": "Naya Matter — Front-End Developer",
+    "description": "Portfolio of Naya Matter, a Front-End Developer specialized in React.js and Next.js."
+  },
+  "nav": {
+    "brand": "Naya",
+    "links": [
+      {
+        "id": "home",
+        "label": "Home"
+      },
+      {
+        "id": "about",
+        "label": "About"
+      },
+      {
+        "id": "skills",
+        "label": "Skills"
+      },
+      {
+        "id": "experience",
+        "label": "Experience"
+      },
+      {
+        "id": "projects",
+        "label": "Projects"
+      },
+      {
+        "id": "contact",
+        "label": "Contact"
+      }
+    ],
+    "downloadCv": "Download CV",
+    "toggleMenu": "Toggle menu",
+    "toggleLanguage": "Switch to Arabic",
+    "toggleTheme": "Toggle dark mode",
+    "muteSound": "Mute sound effects",
+    "unmuteSound": "Enable sound effects"
+  },
+  "hero": {
+    "eyebrow": "Front-End Developer — Damascus, Syria",
+    "greeting": "Hello! I'm",
+    "name": "Naya Matter",
+    "roleText": "Front-End Developer — React / Next.js",
+    "bio": "Specialized in React.js and Next.js, with one year of practical training building responsive interfaces, reusable components, and REST API integrations — deployed and shipped on Vercel.",
+    "downloadCv": "Download CV",
+    "viewWork": "View My Work",
+    "socialGithub": "GitHub",
+    "socialEmail": "Email",
+    "photoAlt": "Naya Matter"
+  },
+  "about": {
+    "eyebrow": "01 — About",
+    "headline": "I care how an interface holds up under real use.",
+    "paragraphs": [
+      "I'm currently a Front-End Developer at NVT in As-Suwayda, building with React and Next.js. Before that, a year as a developer intern at Vica Web Solution — building reusable component libraries, wiring REST APIs into production frontends, and testing endpoints until the data actually behaved. Every project shipped to Vercel.",
+      "Before that, a degree in Information Engineering — Artificial Intelligence from Damascus University."
+    ],
+    "meta": [
+      {
+        "label": "Based in",
+        "value": "Damascus, Syria"
+      },
+      {
+        "label": "Open to",
+        "value": "Remote or on-site"
+      },
+      {
+        "label": "Languages",
+        "value": "Arabic · English"
+      }
+    ],
+    "metrics": [
+      {
+        "value": 2,
+        "suffix": "yrs",
+        "label": "Professional experience"
+      },
+      {
+        "value": 14,
+        "suffix": "+",
+        "label": "Projects shipped"
+      },
+      {
+        "value": 23,
+        "suffix": "",
+        "label": "Technologies"
+      },
+      {
+        "value": 5,
+        "suffix": "yrs",
+        "label": "Engineering degree"
+      }
+    ]
+  },
+  "skills": {
+    "eyebrow": "02 — Skills",
+    "headline": "What I actually reach for when I'm building.",
+    "concepts": {
+      "Redux Toolkit": "Redux Toolkit",
+      "Context API": "Context API",
+      "Responsive Design": "Responsive Design",
+      "RESTful APIs": "RESTful APIs",
+      "Full SDLC": "Full SDLC",
+      "Performance Optimization": "Performance Optimization",
+      "Middleware": "Middleware",
+      "Auth & Security": "Auth & Security"
+    }
+  },
+  "experience": {
+    "eyebrow": "03 — Experience",
+    "headline": "Where I've worked, and what came before it.",
+    "currentBadge": "Current",
+    "entries": {
+      "nvt": {
+        "role": "Front-End Developer",
+        "org": "NVT",
+        "location": "As-Suwayda, Syria",
+        "points": [
+          "Building front-end features with React and Next.js."
+        ]
+      },
+      "vica": {
+        "role": "Full-Stack Developer Intern",
+        "org": "Vica Web Solution",
+        "location": "Damascus, Syria",
+        "points": [
+          "Responsive React.js and Tailwind CSS applications",
+          "Reusable components and REST API integration",
+          "Git/GitHub workflows and code review",
+          "SQL and NoSQL data — PostgreSQL, MySQL, MongoDB",
+          "Deployments and CI on Vercel"
+        ]
+      },
+      "damascus-university": {
+        "role": "B.Eng, Information Engineering — Artificial Intelligence",
+        "org": "Damascus University",
+        "location": "Damascus, Syria",
+        "points": [
+          "Coursework in algorithms, data structures, and software engineering."
+        ]
+      }
+    }
+  },
+  "projects": {
+    "eyebrow": "04 — Projects",
+    "headline": "Recent work, from client sites to internal platforms.",
+    "filterAriaLabel": "Filter projects",
+    "filters": {
+      "all": "All",
+      "public": "Client sites",
+      "internal": "Internal apps"
+    },
+    "items": {
+      "ftt": {
+        "name": "FTT",
+        "org": "Client site + admin",
+        "summary": "Marketing site for a training company with an authenticated dashboard behind it — the public pages, gallery, and application flow are all editable by staff.",
+        "highlights": [
+          "Public site, gallery, and multi-step application form",
+          "Dashboard with sortable tables and drag-to-reorder content",
+          "SEO handled at the framework level — sitemap and robots routes"
+        ]
+      },
+      "cvg": {
+        "name": "CVG",
+        "org": "Client site + CMS",
+        "summary": "Agency site where every section is content-managed. Hero, services, projects, values, process, contact, and footer each have a matching dashboard editor.",
+        "highlights": [
+          "Nine independently editable page sections, one CMS screen each",
+          "Scroll and reveal choreography built with GSAP",
+          "Typed service layer over a shared HTTP client"
+        ]
+      },
+      "inventory": {
+        "name": "Inventory",
+        "org": "Stores dashboard",
+        "summary": "Multi-store inventory dashboard — stock levels, movement charts, and per-store breakdowns. Runs entirely on seeded data, so it is safe to demo end to end.",
+        "highlights": [
+          "Interactive area charts and summary cards over store data",
+          "Filterable, column-sortable data tables",
+          "Auth flow and protected dashboard routes"
+        ]
+      },
+      "task-system": {
+        "name": "Task System",
+        "org": "Internal — NVT",
+        "summary": "Company-wide work platform: workspaces, projects, kanban boards, tickets, help requests, time clocking, and a weighted staff rating system, all under role-based access.",
+        "highlights": [
+          "Drag-and-drop kanban across projects and workspaces",
+          "Live updates over WebSockets with Laravel Echo and Pusher",
+          "Roles and permissions gating every route",
+          "Clock in/out with session and record history"
+        ]
+      },
+      "courses": {
+        "name": "Courses",
+        "org": "Internal — NVT",
+        "summary": "A full learning platform, and the largest thing I have shipped — around 500 source files split across an admin console and a learner-facing app.",
+        "highlights": [
+          "Admin: course, video, audio, quiz, evaluation, and user management",
+          "Learner: enrolment, quizzes, progress tracking, schedule, feedback",
+          "Configurable attention-score engine with live preview and history",
+          "Certificate generation to PDF, rich-text authoring with TinyMCE"
+        ],
+        "statLabel": "source files across two apps"
+      },
+      "web2api-ui": {
+        "name": "Web2API UI",
+        "org": "Internal — NVT",
+        "summary": "Chat front-end for an AI gateway. Streaming responses render as they arrive, including code, math, diagrams, and CJK text.",
+        "highlights": [
+          "Token-by-token streaming with sticky-to-bottom scroll",
+          "Rich message rendering — Shiki highlighting, math, Mermaid diagrams",
+          "Node-graph views built on React Flow",
+          "Live token accounting against model context limits"
+        ]
+      },
+      "lumina-connector": {
+        "name": "Lumina Connector",
+        "org": "Internal — NVT",
+        "summary": "A Manifest V3 Chrome extension that links a user's Gemini session to Lumina in one click, replacing a manual cookie-copying step.",
+        "highlights": [
+          "One-click session hand-off, cookies held in memory only",
+          "Self-hosted private distribution with automatic updates",
+          "Go native-messaging host performs on-disk updates",
+          "No-admin installers for Windows and macOS"
+        ]
+      },
+      "pizza-dashboard": {
+        "name": "Pizza Dashboard",
+        "org": "Internal — RnD Experts",
+        "summary": "A multi-store operations platform for a restaurant chain — staff break tracking, a full cleaning inspection and scoring system, and an inventory counting workflow, all under one roof.",
+        "highlights": [
+          "Cleaning Chart System — daily checklists, inspection grading, and a scored store leaderboard",
+          "Inventory counting via single-use employee links, no account required to submit",
+          "Automatic unit-conversion chains (case → box → LB) per catalog item",
+          "CSV and themed PNG exports for every store report"
+        ]
+      }
+    },
+    "footerNote": "Most repositories are public and readable. The ones marked with a lock are company tools — their running instances need a staff account, so the code and screenshots are the parts I can share. One client's source stays fully private; screenshots are all I can show for that one.",
+    "allRepos": "All repositories on GitHub",
+    "viewProject": "View project",
+    "openDetails": "Open {name} details"
+  },
+  "projectModal": {
+    "dialogLabel": "{name} — project details",
+    "close": "Close project",
+    "source": "Source",
+    "sourcePrivate": "Source is private",
+    "visitLive": "Visit live site",
+    "liveStaff": "Live (staff login)",
+    "walkthroughOnRequest": "Walkthrough on request",
+    "noScreenshots": "No screenshots published for this one yet — the source is public, and I'm happy to walk through it.",
+    "screenshotsNote": "{count} screenshots — drag or use the arrows",
+    "interfaceAlt": "{name} interface",
+    "sliderRegionLabel": "{title} screenshots",
+    "previousScreenshot": "Previous screenshot",
+    "nextScreenshot": "Next screenshot",
+    "goToScreenshot": "Go to screenshot {n}"
+  },
+  "contact": {
+    "eyebrow": "05 — Contact",
+    "headline": "Say hello, or send a project brief.",
+    "intro": "Pick whichever you'll actually check — Telegram sends straight to me, WhatsApp opens a chat with your message pre-filled.",
+    "channels": {
+      "email": "Email",
+      "phone": "Phone",
+      "github": "GitHub"
+    },
+    "telegramAria": "Message on Telegram",
+    "whatsappAria": "Message on WhatsApp",
+    "form": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "messageLabel": "Message",
+      "messagePlaceholder": "What are you building?",
+      "channelLabel": "Send via",
+      "channelTelegram": "Telegram",
+      "channelWhatsapp": "WhatsApp",
+      "send": "Send message",
+      "sendWhatsapp": "Open WhatsApp",
+      "sending": "Sending…"
+    },
+    "messages": {
+      "fillFields": "Fill in every field before sending.",
+      "notConfigured": "Telegram delivery isn't configured yet — try WhatsApp instead.",
+      "networkError": "Telegram couldn't be reached — try WhatsApp instead.",
+      "success": "Sent — I'll get back to you soon."
+    }
+  },
+  "footer": {
+    "rights": "© {year} Naya Matter. All rights reserved.",
+    "backToTop": "Back to top"
+  }
+}
