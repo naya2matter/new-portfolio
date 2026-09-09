@@ -71,8 +71,13 @@ export default function StaggeredText({
 
   const Tag = as;
   return (
+    // Keyed on the text itself: SplitText replaces this element's children
+    // with its own generated spans, so a later React re-render with new
+    // words (a language switch) has nothing of its own left to update and
+    // the old language stays on screen. Changing the key remounts a clean
+    // element with the new text, which the effect above then re-splits.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- polymorphic tag needs a loosened ref type
-    <Tag ref={ref as any} className={className} {...rest}>
+    <Tag key={text} ref={ref as any} className={className} {...rest}>
       {text}
     </Tag>
   );

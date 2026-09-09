@@ -6,32 +6,36 @@ import {
   siBootstrap,
   siCss,
   siFigma,
+  siFramer,
   siGit,
   siGithub,
+  siGooglechrome,
+  siGreensock,
   siHtml5,
   siJavascript,
-  siMongodb,
-  siMysql,
   siNextdotjs,
   siNpm,
-  siPostgresql,
   siPostman,
-  siPrisma,
+  siRadixui,
   siReact,
+  siReactquery,
+  siReacttable,
   siRedux,
   siTailwindcss,
   siTypescript,
   siVercel,
+  siVite,
 } from "simple-icons";
 import {
-  Gauge,
-  Layers,
+  Accessibility,
+  Blocks,
+  Boxes,
+  GitPullRequestArrow,
   Package,
-  RefreshCw,
   Server,
-  ShieldCheck,
   Share2,
   Smartphone,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
@@ -65,16 +69,19 @@ const BRANDS: Item[] = [
   { kind: "brand", label: "Redux", path: siRedux.path, hex: siRedux.hex },
   { kind: "brand", label: "Tailwind CSS", path: siTailwindcss.path, hex: siTailwindcss.hex },
   { kind: "brand", label: "Bootstrap", path: siBootstrap.path, hex: siBootstrap.hex },
+  { kind: "brand", label: "Radix UI", path: siRadixui.path, hex: siRadixui.hex, monochrome: true },
+  { kind: "brand", label: "GSAP", path: siGreensock.path, hex: siGreensock.hex },
+  { kind: "brand", label: "Framer Motion", path: siFramer.path, hex: siFramer.hex, monochrome: true },
+  { kind: "brand", label: "TanStack Query", path: siReactquery.path, hex: siReactquery.hex },
+  { kind: "brand", label: "TanStack Table", path: siReacttable.path, hex: siReacttable.hex },
   { kind: "brand", label: "Figma", path: siFigma.path, hex: siFigma.hex },
-  { kind: "brand", label: "Prisma", path: siPrisma.path, hex: siPrisma.hex, monochrome: true },
-  { kind: "brand", label: "MySQL", path: siMysql.path, hex: siMysql.hex },
-  { kind: "brand", label: "PostgreSQL", path: siPostgresql.path, hex: siPostgresql.hex },
-  { kind: "brand", label: "MongoDB", path: siMongodb.path, hex: siMongodb.hex },
+  { kind: "brand", label: "Vite", path: siVite.path, hex: siVite.hex },
   { kind: "brand", label: "Git", path: siGit.path, hex: siGit.hex },
   { kind: "brand", label: "GitHub", path: siGithub.path, hex: siGithub.hex, monochrome: true },
-  { kind: "brand", label: "Postman", path: siPostman.path, hex: siPostman.hex },
   { kind: "brand", label: "Vercel", path: siVercel.path, hex: siVercel.hex, monochrome: true },
   { kind: "brand", label: "npm", path: siNpm.path, hex: siNpm.hex },
+  { kind: "brand", label: "Postman", path: siPostman.path, hex: siPostman.hex },
+  { kind: "brand", label: "Chrome DevTools", path: siGooglechrome.path, hex: siGooglechrome.hex },
 ];
 
 // No brand mark exists for these — represented with a plain line icon instead
@@ -82,13 +89,14 @@ const BRANDS: Item[] = [
 // gets the same visual treatment in one continuous strip.
 const CONCEPTS: Item[] = [
   { kind: "concept", key: "Redux Toolkit", Icon: Package },
+  { kind: "concept", key: "Zustand", Icon: Boxes },
   { kind: "concept", key: "Context API", Icon: Share2 },
+  { kind: "concept", key: "REST API Integration", Icon: Server },
   { kind: "concept", key: "Responsive Design", Icon: Smartphone },
-  { kind: "concept", key: "RESTful APIs", Icon: Server },
-  { kind: "concept", key: "Full SDLC", Icon: RefreshCw },
-  { kind: "concept", key: "Performance Optimization", Icon: Gauge },
-  { kind: "concept", key: "Middleware", Icon: Layers },
-  { kind: "concept", key: "Auth & Security", Icon: ShieldCheck },
+  { kind: "concept", key: "Accessibility", Icon: Accessibility },
+  { kind: "concept", key: "Reusable Components", Icon: Blocks },
+  { kind: "concept", key: "Code Review", Icon: GitPullRequestArrow },
+  { kind: "concept", key: "Agile Teamwork", Icon: Users },
 ];
 
 const ITEMS: Item[] = [...BRANDS, ...CONCEPTS];
@@ -204,7 +212,7 @@ export default function Skills() {
   return (
     <section ref={sectionRef} id="skills" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-skill-reveal
             className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"

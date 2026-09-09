@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowUpRight, GraduationCap, Images, Lock, Puzzle } from "lucide-react";
 import { siGithub } from "simple-icons";
 import { gsap } from "@/lib/gsap";
+import { formatNumber } from "@/lib/utils";
 import { useLanguage, interpolate } from "@/lib/language";
 import { PROJECTS_MEDIA, PROJECT_ORDER, SITE_LINKS } from "@/content/media";
 import ProjectModal from "./ProjectModal";
@@ -96,7 +97,7 @@ function FallbackArt({
   return (
     <div className="relative flex h-full w-full flex-col justify-center overflow-hidden bg-gradient-to-br from-eucalyptus-sage/20 via-peach-veil/10 to-clay/20 px-5 dark:from-eucalyptus-sage/10 dark:via-clay/5 dark:to-clay/12">
       <Icon
-        className="absolute -right-4 -bottom-4 h-28 w-28 text-accent/10 transition-transform duration-700 group-hover:scale-110"
+        className="absolute -end-4 -bottom-4 h-28 w-28 text-accent/10 transition-transform duration-700 group-hover:scale-110"
         strokeWidth={1}
         aria-hidden
       />
@@ -299,7 +300,7 @@ export default function Projects() {
   return (
     <section ref={sectionRef} id="projects" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-proj-reveal
             className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
@@ -346,8 +347,8 @@ export default function Projects() {
                 }`}
               >
                 {option.label}
-                <span className={selected ? "ml-1.5 opacity-60" : "ml-1.5 opacity-45"}>
-                  {counts[option.id]}
+                <span className={selected ? "ms-1.5 opacity-60" : "ms-1.5 opacity-45"}>
+                  {formatNumber(counts[option.id], locale)}
                 </span>
               </button>
             );
@@ -373,7 +374,7 @@ export default function Projects() {
                 data-proj-card
                 onClick={() => setActive(project)}
                 aria-label={interpolate(content.projects.openDetails, { name: project.name })}
-                className={`group glass relative flex flex-col overflow-hidden rounded-2xl text-left ${
+                className={`group glass relative flex flex-col overflow-hidden rounded-2xl text-start ${
                   project.wide ? "sm:col-span-2" : ""
                 }`}
               >
@@ -426,9 +427,9 @@ export default function Projects() {
                       <Lock className="h-2.5 w-2.5 text-muted" strokeWidth={3} aria-hidden />
                     )}
                     {project.gallery && (
-                      <span className="ml-auto flex items-center gap-1 font-mono text-[10px] text-muted">
+                      <span className="ms-auto flex items-center gap-1 font-mono text-[10px] text-muted">
                         <Images className="h-3 w-3" strokeWidth={2.5} />
-                        {project.gallery.length}
+                        {formatNumber(project.gallery.length, locale)}
                       </span>
                     )}
                   </div>
@@ -447,7 +448,10 @@ export default function Projects() {
                   {/* Always visible now — the stack is the fastest signal of
                       what a project actually is, so it shouldn't be gated
                       behind a hover. */}
-                  <p className="mt-1.5 truncate font-mono text-[10px] tracking-wide text-muted/80">
+                  <p
+                    dir="ltr"
+                    className="mt-1.5 truncate font-mono text-[10px] tracking-wide text-muted/80 rtl:text-right"
+                  >
                     {project.stack.slice(0, 4).join(" · ")}
                   </p>
                 </div>
@@ -458,7 +462,7 @@ export default function Projects() {
 
         <p
           data-proj-reveal
-          className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted lg:mx-0 lg:text-left"
+          className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted lg:mx-0 lg:text-start"
         >
           {content.projects.footerNote}
         </p>

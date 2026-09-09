@@ -450,15 +450,17 @@ export const PROJECT_ORDER = [
 export type ExperienceMedia = {
   id: string;
   kind: "work" | "education";
-  date: string;
+  // The date RANGE is translated prose (Arabic uses Levantine month names and
+  // Arabic-Indic digits), so it lives in en.json / ar.json with the rest of
+  // the words. `year` is just the watermark numeral behind the card.
   year: string;
   current?: boolean;
 };
 
 export const EXPERIENCE_MEDIA: ExperienceMedia[] = [
-  { id: "nvt", kind: "work", date: "Feb 2026 — Present", year: "2026", current: true },
-  { id: "vica", kind: "work", date: "Nov 2024 — Nov 2025", year: "2024" },
-  { id: "damascus-university", kind: "education", date: "2018 — 2023", year: "2018" },
+  { id: "nvt", kind: "work", year: "2026", current: true },
+  { id: "vica", kind: "work", year: "2024" },
+  { id: "damascus-university", kind: "education", year: "2019" },
 ];
 
 export const SITE_LINKS = {
@@ -469,3 +471,8 @@ export const SITE_LINKS = {
   telegramHandle: "nayamatter",
   cv: "/cv/naya-matter-cv.pdf",
 };
+
+// The name the browser saves the CV under, independent of the path it is
+// served from — so replacing the file in public/cv doesn't change what
+// lands in someone's Downloads folder.
+export const CV_FILENAME = "Naya-Matter-CV.pdf";

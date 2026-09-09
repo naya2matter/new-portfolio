@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowUpRight, Lock, X } from "lucide-react";
 import { siGithub } from "simple-icons";
 import { gsap } from "@/lib/gsap";
+import { formatNumber } from "@/lib/utils";
 import { useLanguage, interpolate } from "@/lib/language";
 import ScreenshotSlider from "./ScreenshotSlider";
 import type { CarouselItem } from "./DepthCarousel";
@@ -37,7 +38,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreFocusRef = useRef<Element | null>(null);
   const closingRef = useRef(false);
-  const { content } = useLanguage();
+  const { content, locale } = useLanguage();
 
   // Plays the exit timeline first, then hands control back to the parent,
   // which is what actually unmounts. Guarded so a double Escape (or Escape
@@ -152,7 +153,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="flex items-start justify-between gap-6">
             <div data-modal-stagger>
               <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
-                {project.org} · {project.year}
+                {project.org} · {formatNumber(Number(project.year), locale)}
               </p>
               <h2 className="mt-1.5 font-display text-2xl leading-tight text-foreground sm:text-3xl">
                 {project.name}
@@ -264,7 +265,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   className="mt-5 font-mono text-[11px] tracking-[0.14em] text-muted uppercase"
                 >
                   {interpolate(content.projectModal.screenshotsNote, {
-                    count: project.gallery?.length ?? 0,
+                    count: formatNumber(project.gallery?.length ?? 0, locale),
                   })}
                 </p>
               )}

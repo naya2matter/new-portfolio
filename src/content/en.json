@@ -43,7 +43,7 @@
     "greeting": "Hello! I'm",
     "name": "Naya Matter",
     "roleText": "Front-End Developer — React / Next.js",
-    "bio": "Specialized in React.js and Next.js, with one year of practical training building responsive interfaces, reusable components, and REST API integrations — deployed and shipped on Vercel.",
+    "bio": "Specialized in React.js and Next.js, with two years shipping production interfaces — marketing sites, admin dashboards, and an AI chat front end — in TypeScript and Tailwind CSS, built accessible, responsive, and reusable.",
     "downloadCv": "Download CV",
     "viewWork": "View My Work",
     "socialGithub": "GitHub",
@@ -54,8 +54,8 @@
     "eyebrow": "01 — About",
     "headline": "I care how an interface holds up under real use.",
     "paragraphs": [
-      "I'm currently a Front-End Developer at NVT in As-Suwayda, building with React and Next.js. Before that, a year as a developer intern at Vica Web Solution — building reusable component libraries, wiring REST APIs into production frontends, and testing endpoints until the data actually behaved. Every project shipped to Vercel.",
-      "Before that, a degree in Information Engineering — Artificial Intelligence from Damascus University."
+      "I'm a Front-End Developer at NVT in As-Suwayda, building internal platforms and client-facing web apps with React, Next.js, and TypeScript — task and workspace management, an AI chat interface, a company-wide learning platform, and a multi-store operations dashboard.",
+      "Before that, a year as a full-stack developer intern at Vica Web Solution — responsive React interfaces, reusable component libraries used across client projects, REST APIs wired into full CRUD flows, and every project deployed to Vercel. And before that, a B.Eng. in Information Engineering — Artificial Intelligence from Damascus University."
     ],
     "meta": [
       {
@@ -83,12 +83,12 @@
         "label": "Projects shipped"
       },
       {
-        "value": 23,
+        "value": 31,
         "suffix": "",
         "label": "Technologies"
       },
       {
-        "value": 5,
+        "value": 4,
         "suffix": "yrs",
         "label": "Engineering degree"
       }
@@ -99,13 +99,14 @@
     "headline": "What I actually reach for when I'm building.",
     "concepts": {
       "Redux Toolkit": "Redux Toolkit",
+      "Zustand": "Zustand",
       "Context API": "Context API",
+      "REST API Integration": "REST API Integration",
       "Responsive Design": "Responsive Design",
-      "RESTful APIs": "RESTful APIs",
-      "Full SDLC": "Full SDLC",
-      "Performance Optimization": "Performance Optimization",
-      "Middleware": "Middleware",
-      "Auth & Security": "Auth & Security"
+      "Accessibility": "Accessibility",
+      "Reusable Components": "Reusable Components",
+      "Code Review": "Code Review",
+      "Agile Teamwork": "Agile Teamwork"
     }
   },
   "experience": {
@@ -116,26 +117,33 @@
       "nvt": {
         "role": "Front-End Developer",
         "org": "NVT",
+        "date": "Feb 2026 — Present",
         "location": "As-Suwayda, Syria",
         "points": [
-          "Building front-end features with React and Next.js."
+          "Front-end features across internal platforms — task and workspace management, an AI chat interface, and a company-wide learning platform — with React, Next.js, and TypeScript",
+          "Front end of a multi-store operations dashboard covering QA/inspection checklists, scoring, and inventory counting workflows",
+          "A Manifest V3 Chrome extension that automates session hand-off between internal tools, replacing a manual copy-paste step",
+          "REST APIs integrated into typed React interfaces, with role-based route guarding in the UI",
+          "Collaboration with backend and design teammates to ship production features"
         ]
       },
       "vica": {
         "role": "Full-Stack Developer Intern",
         "org": "Vica Web Solution",
+        "date": "Nov 2024 — Nov 2025",
         "location": "Damascus, Syria",
         "points": [
-          "Responsive React.js and Tailwind CSS applications",
-          "Reusable components and REST API integration",
-          "Git/GitHub workflows and code review",
-          "SQL and NoSQL data — PostgreSQL, MySQL, MongoDB",
-          "Deployments and CI on Vercel"
+          "Responsive, interactive user interfaces with React.js and Tailwind CSS",
+          "REST APIs integrated into React views, with full create/read/update/delete flows in the UI",
+          "Reusable component libraries used across multiple client projects",
+          "Git/GitHub for version control, plus taking part in team code reviews",
+          "Applications deployed and maintained on Vercel"
         ]
       },
       "damascus-university": {
-        "role": "B.Eng, Information Engineering — Artificial Intelligence",
+        "role": "B.Eng. in Information Engineering — Artificial Intelligence",
         "org": "Damascus University",
+        "date": "Sep 2019 — Sep 2023",
         "location": "Damascus, Syria",
         "points": [
           "Coursework in algorithms, data structures, and software engineering."

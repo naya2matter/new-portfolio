@@ -6,13 +6,14 @@ import { ArrowUp, Mail } from "lucide-react";
 import { siGithub } from "simple-icons";
 import { gsap } from "@/lib/gsap";
 import { useLanguage, interpolate } from "@/lib/language";
+import { formatNumber } from "@/lib/utils";
 import { SITE_LINKS } from "@/content/media";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const year = new Date().getFullYear();
-  const { content } = useLanguage();
+  const { content, locale } = useLanguage();
 
   const SOCIALS = [
     { label: content.hero.socialGithub, href: SITE_LINKS.github, icon: "github" as const },
@@ -107,7 +108,7 @@ export default function Footer() {
         <div
           ref={cardRef}
           data-footer-reveal
-          className="glass flex flex-col items-center gap-6 rounded-3xl p-6 text-center sm:flex-row sm:items-center sm:justify-between sm:p-7 sm:text-left"
+          className="glass flex flex-col items-center gap-6 rounded-3xl p-6 text-center sm:flex-row sm:items-center sm:justify-between sm:p-7 sm:text-start"
         >
           <div data-footer-item>
             <a
@@ -117,7 +118,7 @@ export default function Footer() {
               {content.nav.brand}
             </a>
             <p className="mt-1 font-mono text-[11px] tracking-[0.1em] text-muted">
-              {interpolate(content.footer.rights, { year })}
+              {interpolate(content.footer.rights, { year: formatNumber(year, locale) })}
             </p>
           </div>
 

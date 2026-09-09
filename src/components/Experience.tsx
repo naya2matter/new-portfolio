@@ -5,9 +5,11 @@ import { useGSAP } from "@gsap/react";
 import { Briefcase, GraduationCap } from "lucide-react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useLanguage } from "@/lib/language";
+import { formatNumber } from "@/lib/utils";
 import { EXPERIENCE_MEDIA } from "@/content/media";
 
 type Entry = {
+  id: string;
   kind: "work" | "education";
   role: string;
   org: string;
@@ -42,7 +44,7 @@ export default function Experience() {
   const basePathRef = useRef<SVGPathElement>(null);
   const drawPathRef = useRef<SVGPathElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const { content } = useLanguage();
+  const { content, locale } = useLanguage();
 
   // Reverse-chronological, like the CV — order comes from EXPERIENCE_MEDIA,
   // words come from content.experience.entries (see en.json / ar.json).
@@ -262,7 +264,7 @@ export default function Experience() {
       className="relative py-20 lg:py-24"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-exp-reveal
             className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
@@ -281,7 +283,7 @@ export default function Experience() {
         {/* Top marker — the spine's starting point. Centred on the same x as
             the line itself at every breakpoint. */}
         <div className="relative mt-10 h-9">
-          <span className="absolute left-4 -translate-x-1/2 lg:left-1/2">
+          <span className="absolute start-4 -translate-x-1/2 rtl:translate-x-1/2 lg:start-1/2">
             <span
               data-exp-reveal
               className="glass flex h-9 w-9 items-center justify-center rounded-full text-accent"
@@ -318,7 +320,7 @@ export default function Experience() {
             {ENTRIES.map((entry, index) => {
               const onRight = index % 2 === 1;
               return (
-                <div key={`${entry.org}-${entry.role}`} className="contents">
+                <div key={entry.id} className="contents">
                   {/* Duration label — desktop only, in the column on the
                       opposite side of the spine from the card. Matches the
                       dot's own "pt-7 then a 24px band" positioning exactly,
@@ -386,10 +388,10 @@ export default function Experience() {
                         data-year
                         aria-hidden
                         className={`pointer-events-none absolute -top-3 font-display text-7xl text-foreground/[0.06] select-none sm:text-8xl ${
-                          onRight ? "-right-2 lg:right-auto lg:-left-3" : "-right-2"
+                          onRight ? "-end-2 lg:end-auto lg:-start-3" : "-end-2"
                         }`}
                       >
-                        {entry.year}
+                        {formatNumber(Number(entry.year), locale)}
                       </span>
 
                       <div className="relative flex flex-wrap items-center gap-x-3 gap-y-1.5">

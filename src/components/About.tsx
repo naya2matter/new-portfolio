@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useLanguage } from "@/lib/language";
+import { formatNumber } from "@/lib/utils";
 import StaggeredText from "./StaggeredText";
 
 const RADIUS = 34;
@@ -11,7 +12,9 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { content } = useLanguage();
+  // The metric timelines, kept so the language effect below can replay them.
+  const metricsRef = useRef<{ card: HTMLElement; tl: gsap.core.Timeline }[]>([]);
+  const { content, locale } = useLanguage();
   const HEADLINE = content.about.headline;
   const METRICS = content.about.metrics;
   const META = content.about.meta;
@@ -60,6 +63,7 @@ export default function About() {
       });
 
       // Rings draw themselves while the figure ticks up to its real value.
+      metricsRef.current = [];
       gsap.utils
         .toArray<HTMLElement>("[data-metric]")
         .forEach((card, index) => {
@@ -89,16 +93,51 @@ export default function About() {
                 duration: 1.1,
                 ease: "power2.out",
                 onUpdate: () => {
-                  counter.textContent = String(Math.round(ticker.value));
+                  // Reads the live document language rather than the `locale`
+                  // captured when this timeline was built, so a replay after a
+                  // language switch writes the right numeral system.
+                  counter.textContent = formatNumber(
+                    Math.round(ticker.value),
+                    document.documentElement.lang === "ar" ? "ar" : "en",
+                  );
                 },
               },
               0,
             );
           }
+
+          metricsRef.current.push({ card, tl });
         });
     },
     { scope: sectionRef },
   );
+
+  // A language switch re-renders these cards, and the arc's dash offset is an
+  // inline style in the JSX below — so React paints every ring back to empty
+  // and every figure back to zero. The scroll trigger that filled them has
+  // already fired and won't fire again, which left them sitting blank.
+  const localeSettledRef = useRef(false);
+  useEffect(() => {
+    if (!localeSettledRef.current) {
+      localeSettledRef.current = true;
+      return;
+    }
+
+    metricsRef.current.forEach(({ card, tl }) => {
+      const box = card.getBoundingClientRect();
+      const onScreen = box.top < window.innerHeight * 0.92 && box.bottom > 0;
+
+      if (onScreen) {
+        // Watching it count up again is the nicer answer while you're looking
+        // straight at it — and it re-counts in the new numeral system.
+        tl.restart();
+      } else if (tl.progress() === 1) {
+        // Out of sight: just re-apply the finished state, no animation to see.
+        tl.progress(0);
+        tl.progress(1);
+      }
+    });
+  }, [locale]);
 
   return (
     <section
@@ -107,7 +146,7 @@ export default function About() {
       className="relative px-4 pt-10 pb-20 sm:px-6 lg:pt-14 lg:pb-24"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-about-reveal
             className="shrink-0 font-mono text-xs uppercase tracking-[0.2em] text-muted"
@@ -154,8 +193,8 @@ export default function About() {
               data-about-reveal
               className="flex flex-wrap gap-x-8 gap-y-3 pt-2"
             >
-              {META.map((item) => (
-                <div key={item.label}>
+              {META.map((item, index) => (
+                <div key={index}>
                   <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
                     {item.label}
                   </dt>
@@ -172,9 +211,14 @@ export default function About() {
             data-theme-impact
             className="glass grid h-fit grid-cols-2 gap-x-4 gap-y-6 rounded-3xl p-6 sm:gap-x-8"
           >
-            {METRICS.map((metric) => (
+            {METRICS.map((metric, index) => (
               <div
-                key={metric.label}
+                // Keyed by position, NOT by the label: the labels are
+                // translated, so a label key makes React discard every card on
+                // a language switch and mount fresh ones — which leaves the
+                // ring timelines below animating nodes that are no longer in
+                // the document, and the visible cards blank.
+                key={index}
                 data-metric
                 className="flex items-center gap-3"
               >
@@ -212,14 +256,14 @@ export default function About() {
                       data-count={metric.value}
                       className="font-display text-2xl leading-none text-foreground"
                     >
-                      0
+                      {formatNumber(0, locale)}
                     </span>
                     {metric.suffix && (
                       <span
                         className={
                           metric.suffix === "+"
                             ? "font-display text-2xl leading-none text-accent"
-                            : "ml-0.5 self-center font-mono text-[10px] text-muted"
+                            : "ms-0.5 self-center font-mono text-[10px] text-muted"
                         }
                       >
                         {metric.suffix}

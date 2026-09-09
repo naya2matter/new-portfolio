@@ -3,9 +3,9 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useLanguage } from "@/lib/language";
-import { SITE_LINKS } from "@/content/media";
+import { CV_FILENAME, SITE_LINKS } from "@/content/media";
 
 function socialIcons(labels: { github: string; email: string }) {
   return [
@@ -133,9 +133,16 @@ export default function Hero() {
         },
       });
 
+      // Function-based so the two columns always exit toward the side they
+      // already sit on: text left / photo right in English, and the mirror of
+      // that in Arabic, where the grid itself has swapped them. Re-evaluated
+      // on ScrollTrigger.refresh(), which the language effect below fires.
+      const exitAway = (sign: number) => () =>
+        sign * 110 * (document.documentElement.dir === "rtl" ? -1 : 1);
+
       exit
-        .to(textColRef.current, { xPercent: -110, ease: "power2.in" }, 0)
-        .to(photoColRef.current, { xPercent: 110, ease: "power2.in" }, 0)
+        .to(textColRef.current, { xPercent: exitAway(-1), ease: "power2.in" }, 0)
+        .to(photoColRef.current, { xPercent: exitAway(1), ease: "power2.in" }, 0)
         .to(
           [textColRef.current, photoColRef.current],
           { opacity: 0, ease: "power1.in" },
@@ -202,6 +209,12 @@ export default function Hero() {
       return;
     }
     if (typedRef.current) typedRef.current.textContent = ROLE_TEXT;
+
+    // The whole section re-flows when the language flips — the columns swap
+    // sides, Arabic sets taller, and the hero's own height changes with it.
+    // Refreshing re-measures every trigger against the new layout and
+    // re-evaluates the direction-aware exit above.
+    ScrollTrigger.refresh();
   }, [ROLE_TEXT]);
 
   return (
@@ -213,7 +226,7 @@ export default function Hero() {
       <div className="relative mx-auto grid w-full max-w-5xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
         <div
           ref={textColRef}
-          className="order-2 px-2 text-center lg:order-1 lg:px-0 lg:text-left"
+          className="order-2 px-2 text-center lg:order-1 lg:px-0 lg:text-start"
         >
           <div ref={textInnerRef}>
             <p
@@ -237,7 +250,7 @@ export default function Hero() {
               <span
                 ref={caretRef}
                 aria-hidden
-                className="ml-0.5 inline-block h-[1.1em] w-[2px] translate-y-[0.15em] bg-accent"
+                className="ms-0.5 inline-block h-[1.1em] w-[2px] translate-y-[0.15em] bg-accent"
               />
             </p>
 
@@ -254,7 +267,7 @@ export default function Hero() {
             >
               <a
                 href={SITE_LINKS.cv}
-                download
+                download={CV_FILENAME}
                 data-theme-impact
                 className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-forest-ink transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
               >

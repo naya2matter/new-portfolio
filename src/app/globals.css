@@ -98,10 +98,29 @@ html[dir="rtl"] {
 
 /* Wide letter-spacing (the mono/uppercase eyebrow labels, badges, and filter
    tabs) reads fine in Latin but breaks Arabic letterforms apart, since
-   Arabic joins letters within a word — so it's switched off for RTL only. */
-html[dir="rtl"] .uppercase {
+   Arabic joins letters within a word — so it's switched off for RTL only.
+   `tracking-tight` on the display headlines is the same problem in the other
+   direction: negative tracking on joined script crowds the letterforms into
+   each other. Islands explicitly marked `dir="ltr"` (the skills marquee, the
+   contact details, project stacks) keep their own spacing — the text in them
+   really is Latin. */
+html[dir="rtl"] [class*="tracking-"]:not([dir="ltr"], [dir="ltr"] *) {
   letter-spacing: 0;
 }
+
+/* Arabic needs more leading than Latin at the same size: Cairo and Amiri hang
+   dots and tails well below the baseline and carry marks above it, so lines
+   set at the Latin `leading-tight` / `leading-snug` collide. These override
+   the utilities only under RTL, and only for the text elements — leaving
+   layout utilities and LTR islands alone. */
+html[dir="rtl"] :is(h1, h2, h3):not([dir="ltr"], [dir="ltr"] *) {
+  line-height: 1.5;
+}
+
+html[dir="rtl"] :is(p, li, dd, dt):not([dir="ltr"], [dir="ltr"] *) {
+  line-height: 1.9;
+}
+
 
 /* Frosted glass surface. Needs a colorful blurred backdrop behind it (see
    the .blob elements in Hero) to actually read as "glass" rather than a

@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useLanguage } from "@/lib/language";
-import { SITE_LINKS } from "@/content/media";
+import { CV_FILENAME, SITE_LINKS } from "@/content/media";
 import ThemeToggle from "./ThemeToggle";
 import SoundToggle from "./SoundToggle";
+import LanguageToggle from "./LanguageToggle";
+import BrandMark from "./BrandMark";
 
 // Arabic letters join to their neighbours, so slicing a word into per-character
 // spans visually shatters it. Latin text rolls character by character; Arabic
@@ -81,6 +83,12 @@ function NavLink({ id, label, active, perChar, onHover, register }: NavLinkProps
         if (rootRef.current) onHover(rootRef.current);
       }}
       onBlur={() => tlRef.current?.reverse()}
+      // Pinned to the label's OWN direction rather than the document's: the
+      // English labels are still on screen for the length of the swap-out
+      // animation after `dir` has already flipped to rtl, and their
+      // per-character spans would otherwise re-order into "emoH" on the way
+      // out. Arabic labels aren't split, so rtl here leaves them untouched.
+      dir={perChar ? "ltr" : "rtl"}
       className="block px-3 py-1.5 text-sm"
     >
       {/* Fixed-height clipping window: the two copies slide through it, and
@@ -132,6 +140,15 @@ export default function Nav() {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const { content, locale } = useLanguage();
   const links = content.nav.links;
+
+  // The labels the nav is CURRENTLY showing, which deliberately lag behind
+  // `locale`: switching language plays the old labels out, swaps the text
+  // while nothing is visible, then plays the new ones in. Without this the
+  // words would hard-cut mid-layout and the bar would snap to its new width
+  // in the same frame.
+  const [shown, setShown] = useState({ links, locale });
+  const swapInRef = useRef(false);
+  const preSwapWidthRef = useRef(0);
 
   // `mounted` transitions live here, in the event handlers that change
   // `open`, rather than in an effect derived from it — reduceMotion needs
@@ -279,6 +296,130 @@ export default function Nav() {
     });
   }
 
+  // Phase one of a language swap: fade the current labels out, in reading
+  // order, and retract the underline. The text itself is only replaced once
+  // they've gone, so no frame ever shows half-translated links.
+  useEffect(() => {
+    if (shown.locale === locale) return;
+
+    const next = { links, locale };
+    const wrap = linksWrapRef.current;
+    const items = wrap?.querySelectorAll<HTMLElement>("[data-nav-item]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // GSAP runs on requestAnimationFrame, which a hidden tab freezes
+    // outright — an animated swap started there would never reach its
+    // onComplete and the labels would sit in the old language. Switching
+    // language away from the eye is just a plain swap.
+    if (reduceMotion || !items?.length || !wrap || document.visibilityState !== "visible") {
+      setShown(next);
+      return;
+    }
+
+    let swapped = false;
+    const swap = () => {
+      if (swapped) return;
+      swapped = true;
+      clearTimeout(safety);
+      swapInRef.current = true;
+      setShown(next);
+    };
+
+    preSwapWidthRef.current = wrap.getBoundingClientRect().width;
+    gsap.to(underlineRef.current, {
+      opacity: 0,
+      duration: 0.2,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+    gsap.to(items, {
+      y: -6,
+      opacity: 0,
+      filter: "blur(4px)",
+      duration: 0.26,
+      stagger: 0.03,
+      ease: "power2.in",
+      overwrite: "auto",
+      onComplete: swap,
+    });
+
+    // Safety net for a tab that gets backgrounded mid-flight: the ticker
+    // stops, onComplete never arrives, and the swap has to happen anyway.
+    const safety = setTimeout(swap, 900);
+    return () => clearTimeout(safety);
+  }, [locale, links, shown.locale]);
+
+  // Phase two, in a layout effect so it runs before the browser paints the
+  // freshly swapped labels: they start hidden and rise in, and the bar
+  // itself tweens between its old and new width rather than jumping — the
+  // Arabic and English labels are noticeably different lengths.
+  useLayoutEffect(() => {
+    if (!swapInRef.current) return;
+    swapInRef.current = false;
+
+    const wrap = linksWrapRef.current;
+    const items = wrap?.querySelectorAll<HTMLElement>("[data-nav-item]");
+    if (!wrap || !items?.length) return;
+
+    const settle = () => {
+      gsap.set(items, { y: 0, opacity: 1, filter: "none", clearProps: "filter" });
+      // Re-measure from the new labels: their widths (and, under RTL, their
+      // whole order) have changed underneath the underline.
+      const el = activeId ? linkElsRef.current[activeId] : null;
+      if (el) moveUnderlineTo(el);
+    };
+
+    if (document.visibilityState !== "visible") {
+      settle();
+      return;
+    }
+
+    const fromWidth = preSwapWidthRef.current;
+    const toWidth = wrap.getBoundingClientRect().width;
+    if (fromWidth && Math.abs(toWidth - fromWidth) > 1) {
+      gsap.fromTo(
+        wrap,
+        { width: fromWidth },
+        { width: toWidth, duration: 0.45, ease: "power3.out", clearProps: "width" },
+      );
+    }
+
+    // The hidden start state is applied synchronously — the new labels must
+    // never paint at full opacity before the tween takes over — but the
+    // tween itself waits a frame, clear of the exit tween's own callback.
+    gsap.set(items, { y: 8, opacity: 0, filter: "blur(4px)" });
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(safety);
+      settle();
+    };
+
+    const frame = requestAnimationFrame(() => {
+      gsap.to(items, {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.45,
+        stagger: 0.045,
+        ease: "power3.out",
+        overwrite: "auto",
+        onComplete: finish,
+      });
+    });
+
+    // Same reasoning as the exit: whatever happens to the ticker, the links
+    // must not be left invisible.
+    const safety = setTimeout(finish, 1200);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(safety);
+    };
+  }, [shown, activeId]);
+
   // Tracks which section owns the middle band of the viewport, so the
   // underline always has a home even when nobody is hovering.
   useEffect(() => {
@@ -345,9 +486,10 @@ export default function Nav() {
         >
           <a
             href="#home"
-            className="font-display text-lg font-medium tracking-tight text-foreground"
+            aria-label={content.hero.name}
+            className="group flex items-center text-foreground transition-transform duration-300 ease-out hover:-translate-y-px"
           >
-            {content.nav.brand}
+            <BrandMark className="transition-transform duration-500 ease-out group-hover:rotate-[8deg]" />
           </a>
 
           <ul
@@ -355,13 +497,13 @@ export default function Nav() {
             onMouseLeave={onLinksLeave}
             className="relative hidden items-center gap-1 md:flex"
           >
-            {links.map((link) => (
-              <li key={link.id}>
+            {shown.links.map((link) => (
+              <li key={link.id} data-nav-item>
                 <NavLink
                   id={link.id}
                   label={link.label}
                   active={activeId === link.id}
-                  perChar={locale !== "ar"}
+                  perChar={shown.locale !== "ar"}
                   onHover={onLinkHover}
                   register={(id, el) => {
                     linkElsRef.current[id] = el;
@@ -378,10 +520,11 @@ export default function Nav() {
           </ul>
 
           <div className="hidden items-center gap-2 md:flex">
+            <LanguageToggle />
             <SoundToggle />
             <a
               href={SITE_LINKS.cv}
-              download
+              download={CV_FILENAME}
               className="rounded-full bg-accent px-5 py-2 text-sm font-medium text-forest-ink transition active:translate-y-px"
             >
               {content.nav.downloadCv}
@@ -389,6 +532,7 @@ export default function Nav() {
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
+            <LanguageToggle />
             <SoundToggle />
             <button
               ref={closeBtnRef}
@@ -440,7 +584,7 @@ export default function Nav() {
             className="fixed inset-x-4 top-[4.75rem] z-40 opacity-0 sm:inset-x-6 md:hidden"
           >
             <div className="glass flex flex-col gap-1 rounded-3xl p-4">
-              {links.map((link) => (
+              {shown.links.map((link) => (
                 <a
                   key={link.id}
                   data-menu-item
@@ -454,7 +598,7 @@ export default function Nav() {
               <a
                 data-menu-item
                 href={SITE_LINKS.cv}
-                download
+                download={CV_FILENAME}
                 onClick={closeMenu}
                 className="mt-2 rounded-full bg-accent px-4 py-2.5 text-center text-sm font-medium text-forest-ink"
               >

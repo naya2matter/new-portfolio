@@ -83,7 +83,8 @@ export default function Contact() {
 
       gsap.utils.toArray<HTMLElement>("[data-channel-card]").forEach((card) => {
         gsap.from(card, {
-          x: -24,
+          // From the side the column starts on, which flips with the layout.
+          x: () => (document.documentElement.dir === "rtl" ? 24 : -24),
           opacity: 0,
           duration: 0.6,
           ease: "power3.out",
@@ -146,7 +147,7 @@ export default function Contact() {
   return (
     <section ref={sectionRef} id="contact" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-contact-reveal
             className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
@@ -196,7 +197,7 @@ export default function Contact() {
                   <span className="block font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
                     {channel.label}
                   </span>
-                  <span className="block truncate text-sm text-foreground">
+                  <span dir="ltr" className="block truncate text-sm text-foreground rtl:text-right">
                     {channel.value}
                   </span>
                 </span>
@@ -245,7 +246,7 @@ export default function Contact() {
             }}
           >
             <div className="relative grid gap-4 sm:grid-cols-2">
-              <label data-field-reveal className="flex flex-col gap-1.5 text-left">
+              <label data-field-reveal className="flex flex-col gap-1.5 text-start">
                 <span className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
                   {content.contact.form.nameLabel}
                 </span>
@@ -258,7 +259,7 @@ export default function Contact() {
                   placeholder={content.contact.form.namePlaceholder}
                 />
               </label>
-              <label data-field-reveal className="flex flex-col gap-1.5 text-left">
+              <label data-field-reveal className="flex flex-col gap-1.5 text-start">
                 <span className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
                   {content.contact.form.emailLabel}
                 </span>
@@ -271,7 +272,7 @@ export default function Contact() {
                   placeholder={content.contact.form.emailPlaceholder}
                 />
               </label>
-              <label data-field-reveal className="flex flex-col gap-1.5 text-left sm:col-span-2">
+              <label data-field-reveal className="flex flex-col gap-1.5 text-start sm:col-span-2">
                 <span className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
                   {content.contact.form.messageLabel}
                 </span>
