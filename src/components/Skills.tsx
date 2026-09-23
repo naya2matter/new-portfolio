@@ -169,7 +169,7 @@ export default function Skills() {
       // no jump or visible seam.
       marqueeTweenRef.current = gsap.to("[data-track]", {
         xPercent: -50,
-        duration: 52,
+        duration: 90,
         ease: "none",
         repeat: -1,
       });
@@ -180,7 +180,7 @@ export default function Skills() {
       if (!trackRef.current) return;
       const skewSetter = gsap.quickSetter(trackRef.current, "skewX", "deg");
       const clampSkew = gsap.utils.clamp(-6, 6);
-      const clampSpeed = gsap.utils.clamp(0.5, 4);
+      const clampSpeed = gsap.utils.clamp(1, 1.6);
       const skewState = { value: 0 };
 
       const velocityTrigger = ScrollTrigger.create({
@@ -196,9 +196,25 @@ export default function Skills() {
             onUpdate: () => skewSetter(skewState.value),
           });
 
-          marqueeTweenRef.current?.timeScale(
-            clampSpeed(1 + Math.abs(velocity) / 900),
-          );
+          // Gentle boost while scrolling, then glide back to the base pace —
+          // without the ease-back the strip stayed at whatever speed the
+          // last scroll event left it, often several times too fast.
+          const tween = marqueeTweenRef.current;
+          if (tween) {
+            gsap.to(tween, {
+              timeScale: clampSpeed(1 + Math.abs(velocity) / 2500),
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: true,
+              onComplete: () => {
+                gsap.to(tween, {
+                  timeScale: 1,
+                  duration: 1.2,
+                  ease: "power2.out",
+                });
+              },
+            });
+          }
         },
       });
 
