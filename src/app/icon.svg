@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <!-- Site icon: the nav's BrandMark monogram on a solid disc, so it stays
+       legible on both light and dark browser tab bars. -->
+  <style>
+    .disc { fill: #fff9e2; stroke: #dca278; }
+    .ink { stroke: #232a1e; }
+    @media (prefers-color-scheme: dark) {
+      .disc { fill: #181b14; }
+      .ink { stroke: #f2efdd; }
+    }
+  </style>
+  <circle class="disc" cx="20" cy="20" r="19" stroke-width="1.5"/>
+  <path class="ink" d="M13.5 27.5V12.5M26.5 27.5V12.5" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M13.5 12.5L26.5 27.5" stroke="#dca278" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="30.5" cy="11.5" r="2.2" fill="#dca278"/>
+</svg>
