@@ -108,7 +108,7 @@ export default function Footer() {
         <div
           ref={cardRef}
           data-footer-reveal
-          className="glass flex flex-col items-center gap-6 rounded-3xl p-6 text-center sm:flex-row sm:items-center sm:justify-between sm:p-7 sm:text-start"
+          className="glass glass-shine flex flex-col items-center gap-6 rounded-3xl p-6 text-center sm:flex-row sm:items-center sm:justify-between sm:p-7 sm:text-start"
         >
           <div data-footer-item>
             <a

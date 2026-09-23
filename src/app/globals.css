@@ -20,9 +20,21 @@
   --accent: var(--clay);
   --muted: var(--olive-muted);
 
-  --glass-bg: rgba(255, 255, 255, 0.22);
+  --glass-bg: rgba(255, 253, 245, 0.28);
+  --glass-bg-strong: rgba(255, 255, 255, 0.62);
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-lowlight: rgba(120, 96, 60, 0.12);
   --glass-border: rgba(35, 42, 30, 0.14);
-  --glass-shadow: rgba(35, 42, 30, 0.14);
+  --glass-shadow: rgba(92, 72, 40, 0.18);
+  --veil: rgba(255, 249, 226, 0.28);
+
+  /* Gold leaf, pulled from the gold-ink backdrop. Deeper in the day theme so
+     small gold type still reads on ivory. */
+  --gold-deep: #8a6120;
+  --gold: #b8872f;
+  --gold-light: #d9b265;
+  --shine: rgba(255, 255, 255, 0.42);
 
   --pullcord-top: -8px;
   --pullcord-right: 3.5rem;
@@ -45,9 +57,19 @@
   --accent: var(--clay);
   --muted: var(--sage-muted);
 
-  --glass-bg: rgba(34, 38, 29, 0.32);
+  --glass-bg: rgba(24, 27, 20, 0.38);
+  --glass-bg-strong: rgba(60, 64, 50, 0.55);
+  --glass-edge: rgba(242, 239, 221, 0.2);
+  --glass-highlight: rgba(242, 239, 221, 0.22);
+  --glass-lowlight: rgba(0, 0, 0, 0.3);
   --glass-border: rgba(242, 239, 221, 0.14);
-  --glass-shadow: rgba(0, 0, 0, 0.4);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+  --veil: rgba(20, 22, 16, 0.7);
+
+  --gold-deep: #b98f45;
+  --gold: #d8b36a;
+  --gold-light: #f2d99a;
+  --shine: rgba(242, 217, 154, 0.12);
 }
 
 @theme inline {
@@ -122,14 +144,140 @@ html[dir="rtl"] :is(p, li, dd, dt):not([dir="ltr"], [dir="ltr"] *) {
 }
 
 
-/* Frosted glass surface. Needs a colorful blurred backdrop behind it (see
-   the .blob elements in Hero) to actually read as "glass" rather than a
-   plain translucent gray panel. */
+/* Frosted glass surface, modelled on real glass: a bright tinted sheet
+   that heavily blurs and saturates the painted backdrop behind it, a crisp
+   light edge, a lit top rim and a darker bottom rim, and a soft drop
+   shadow that lifts it off the page. Uses its own --glass-edge for the
+   outline so --glass-border stays a subtle divider color inside panels. */
 .glass {
-  @apply backdrop-blur-2xl;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 24px 48px var(--glass-shadow);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  background: linear-gradient(
+    135deg,
+    var(--glass-bg-strong) 0%,
+    var(--glass-bg) 55%,
+    var(--glass-bg) 100%
+  );
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 var(--glass-lowlight),
+    0 24px 48px -16px var(--glass-shadow),
+    0 2px 6px -2px var(--glass-shadow);
+}
+
+/* Veil over the fixed painted backdrop (see AmbientBackdrop) — keeps body
+   text legible on top of the images in both themes. */
+.backdrop-veil {
+  background: var(--veil);
+  transition: background-color 450ms ease;
+}
+
+/* Light catching the glass. The cursor position arrives as --mx / --my
+   (see GlassShineInit): ::before is a soft spot of light on the pane,
+   ::after lights up the gold rim nearest the cursor, masked down to a 1px
+   ring so only the edge glows. Both sit above the content but ignore the
+   pointer, and only show on devices that can actually hover. */
+.glass-shine {
+  --mx: 50%;
+  --my: -300px;
+  position: relative;
+  isolation: isolate;
+}
+
+.glass-shine::before,
+.glass-shine::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.glass-shine::before {
+  inset: 0;
+  background: radial-gradient(
+    280px circle at var(--mx) var(--my),
+    var(--shine),
+    transparent 65%
+  );
+}
+
+.glass-shine::after {
+  inset: -1px;
+  padding: 1px;
+  background: radial-gradient(
+    200px circle at var(--mx) var(--my),
+    var(--gold-light),
+    var(--gold) 35%,
+    transparent 75%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+@media (hover: hover) {
+  .glass-shine:hover::before,
+  .glass-shine:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Gold detailing on the section headers: the eyebrow label set in gold
+   leaf, and a hairline under the whole heading row. The hairline fades out
+   on both sides while the heading is centred (mobile), and from the start
+   edge onward once it sits in a row (lg) — flipped for RTL. */
+.gold-eyebrow {
+  background: linear-gradient(
+    100deg,
+    var(--gold-deep),
+    var(--gold-light) 50%,
+    var(--gold-deep)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.section-heading {
+  padding-bottom: 1.25rem;
+  background: linear-gradient(
+      90deg,
+      transparent,
+      var(--gold) 50%,
+      transparent
+    )
+    center bottom / min(16rem, 70%) 1px no-repeat;
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    background-image: linear-gradient(
+      90deg,
+      var(--gold),
+      color-mix(in oklab, var(--gold-light) 60%, transparent) 35%,
+      transparent
+    );
+    background-position: left bottom;
+    background-size: 100% 1px;
+  }
+
+  html[dir="rtl"] .section-heading {
+    background-image: linear-gradient(
+      270deg,
+      var(--gold),
+      color-mix(in oklab, var(--gold-light) 60%, transparent) 35%,
+      transparent
+    );
+    background-position: right bottom;
+  }
 }
 
 /* Large soft color field, blurred into a glow. Used both as full-bleed

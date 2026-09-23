@@ -264,10 +264,10 @@ export default function Experience() {
       className="relative py-20 lg:py-24"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
+        <div className="section-heading flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-exp-reveal
-            className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
+            className="gold-eyebrow shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
           >
             {content.experience.eyebrow}
           </p>
@@ -382,7 +382,7 @@ export default function Experience() {
                   >
                     <div
                       data-exp-card
-                      className="glass relative overflow-hidden rounded-2xl p-5"
+                      className="glass glass-shine relative overflow-hidden rounded-2xl p-5"
                     >
                       <span
                         data-year

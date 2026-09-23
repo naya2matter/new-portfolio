@@ -146,10 +146,10 @@ export default function About() {
       className="relative px-4 pt-10 pb-20 sm:px-6 lg:pt-14 lg:pb-24"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
+        <div className="section-heading flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-about-reveal
-            className="shrink-0 font-mono text-xs uppercase tracking-[0.2em] text-muted"
+            className="gold-eyebrow shrink-0 font-mono text-xs uppercase tracking-[0.2em] text-muted"
           >
             {content.about.eyebrow}
           </p>
@@ -209,7 +209,7 @@ export default function About() {
           <div
             data-about-reveal
             data-theme-impact
-            className="glass grid h-fit grid-cols-2 gap-x-4 gap-y-6 rounded-3xl p-6 sm:gap-x-8"
+            className="glass glass-shine grid h-fit grid-cols-2 gap-x-4 gap-y-6 rounded-3xl p-6 sm:gap-x-8"
           >
             {METRICS.map((metric, index) => (
               <div

@@ -212,10 +212,10 @@ export default function Skills() {
   return (
     <section ref={sectionRef} id="skills" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
+        <div className="section-heading flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-skill-reveal
-            className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
+            className="gold-eyebrow shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
           >
             {content.skills.eyebrow}
           </p>

@@ -147,10 +147,10 @@ export default function Contact() {
   return (
     <section ref={sectionRef} id="contact" className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
+        <div className="section-heading flex flex-col items-center gap-3 text-center lg:flex-row lg:items-baseline lg:gap-6 lg:text-start">
           <p
             data-contact-reveal
-            className="shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
+            className="gold-eyebrow shrink-0 font-mono text-xs tracking-[0.2em] text-muted uppercase"
           >
             {content.contact.eyebrow}
           </p>
@@ -178,7 +178,7 @@ export default function Contact() {
                 target={channel.href.startsWith("http") ? "_blank" : undefined}
                 rel={channel.href.startsWith("http") ? "noreferrer noopener" : undefined}
                 onMouseMove={onSpotlightMove}
-                className="group glass relative flex items-center gap-4 overflow-hidden rounded-2xl p-4 transition-transform duration-300 ease-out hover:-translate-y-0.5"
+                className="group glass glass-shine relative flex items-center gap-4 overflow-hidden rounded-2xl p-4 transition-transform duration-300 ease-out hover:-translate-y-0.5"
                 style={{
                   backgroundImage:
                     "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%)",
@@ -239,7 +239,7 @@ export default function Contact() {
             onSubmit={onSubmit}
             onMouseMove={onSpotlightMove}
             data-contact-reveal
-            className="glass relative overflow-hidden rounded-2xl p-6"
+            className="glass glass-shine relative overflow-hidden rounded-2xl p-6"
             style={{
               backgroundImage:
                 "radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%)",
