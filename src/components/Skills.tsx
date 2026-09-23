@@ -27,7 +27,6 @@ import {
   siVite,
 } from "simple-icons";
 import {
-  Accessibility,
   Blocks,
   Boxes,
   GitPullRequestArrow,
@@ -93,7 +92,6 @@ const CONCEPTS: Item[] = [
   { kind: "concept", key: "Context API", Icon: Share2 },
   { kind: "concept", key: "REST API Integration", Icon: Server },
   { kind: "concept", key: "Responsive Design", Icon: Smartphone },
-  { kind: "concept", key: "Accessibility", Icon: Accessibility },
   { kind: "concept", key: "Reusable Components", Icon: Blocks },
   { kind: "concept", key: "Code Review", Icon: GitPullRequestArrow },
   { kind: "concept", key: "Agile Teamwork", Icon: Users },
